@@ -1,6 +1,8 @@
 {
-    "rust.target": "thumbv7em-none-eabihf",
-    "rust.all_targets": false,
-    // "rust-analyzer.cargo.target": "thumbv7em-none-eabihf",
-    // "rust-analyzer.checkOnSave.allTargets": false
+  "rust.target": "thumbv7em-none-eabihf",
+  "rust.all_targets": false,
+  // "rust-client.disableRustup": true,
+  "rust-client.channel": "nightly-2020-08-26-x86_64-apple-darwin"
+  // "rust-analyzer.cargo.target": "thumbv7em-none-eabihf",
+  // "rust-analyzer.checkOnSave.allTargets": false
 }
