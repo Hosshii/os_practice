@@ -22,16 +22,6 @@ fn panic(_info: &PanicInfo) -> ! {
     loop {}
 }
 
-// pub fn test_runner(tests: &[&dyn Fn()]) {
-//     serial_println!("Running {} tests", tests.len());
-//     for test in tests {
-//         test();
-//         serial_println!("[test did not panic]");
-//         exit_qemu(QemuExitCode::Failed);
-//     }
-//     exit_qemu(QemuExitCode::Success);
-// }
-
 use rust_os::serial_print;
 
 fn should_fail() {
