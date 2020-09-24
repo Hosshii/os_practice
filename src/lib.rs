@@ -7,6 +7,7 @@
 
 extern crate rlibc;
 
+pub mod gdt;
 pub mod interrupt;
 pub mod serial;
 pub mod vga_buffer;
@@ -14,6 +15,7 @@ pub mod vga_buffer;
 use core::panic::PanicInfo;
 
 pub fn init() {
+    gdt::init();
     interrupt::init_idt();
 }
 
