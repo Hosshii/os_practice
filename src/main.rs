@@ -18,23 +18,17 @@ pub extern "C" fn _start() -> ! {
 
     rust_os::init();
 
-    // fn stack_overflow() {
-    //     stack_overflow();
-    // }
-
-    // stack_overflow();
-
-    // unsafe {
-    //     *(0xdeadbeef as *mut u64) = 42;
-    // }
-
     x86_64::instructions::interrupts::int3();
 
     #[cfg(test)]
     test_main();
 
     println!("it did not crash");
-    loop {}
+    // loop {
+    //     use rust_os::print;
+    //     print!("-");
+    // }
+    rust_os::hlt_loop();
 }
 
 /// This function is called on panic.
@@ -42,7 +36,7 @@ pub extern "C" fn _start() -> ! {
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop {}
+    rust_os::hlt_loop();
 }
 
 #[cfg(test)]
