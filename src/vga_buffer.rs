@@ -82,6 +82,19 @@ impl Writer {
             }
         }
     }
+    pub fn delete_byte(&mut self) {
+        if self.column_position <= 0 {
+            self.back_line();
+        }
+        let row = BUFFER_HEIGHT - 1;
+        let col = self.column_position;
+        let color_code = self.color_code;
+        self.buffer.chars[row][col - 1].write(ScreenChar {
+            ascii_character: b' ',
+            color_code,
+        });
+        self.column_position -= 1;
+    }
     fn new_line(&mut self) {
         for row in 1..BUFFER_HEIGHT {
             for col in 0..BUFFER_WIDTH {
@@ -91,6 +104,16 @@ impl Writer {
         }
         self.clear_row(BUFFER_HEIGHT - 1);
         self.column_position = 0;
+    }
+    fn back_line(&mut self) {
+        for row in (0..BUFFER_HEIGHT - 1).rev() {
+            for col in 0..BUFFER_WIDTH {
+                let character = self.buffer.chars[row][col].read();
+                self.buffer.chars[row + 1][col].write(character);
+            }
+        }
+        self.clear_row(0);
+        self.column_position = BUFFER_WIDTH;
     }
     fn clear_row(&mut self, row: usize) {
         let blank = ScreenChar {
@@ -149,6 +172,13 @@ pub fn _print(args: fmt::Arguments) {
     })
 }
 
+pub fn delete_byte() {
+    use x86_64::instructions::interrupts;
+    interrupts::without_interrupts(|| {
+        WRITER.lock().delete_byte();
+    })
+}
+
 #[test_case]
 fn test_println_simple() {
     println!("test_println_simple {}", "output");
@@ -175,4 +205,10 @@ fn test_println_output() {
             assert_eq!(char::from(screen_char.ascii_character), c);
         }
     });
+}
+
+#[test_case]
+fn test_delete() {
+    print!("hello");
+    WRITER.lock().delete_byte();
 }
